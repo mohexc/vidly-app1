@@ -53,7 +53,7 @@ function Movies() {
 
   return (
     <div className="row">
-      <div className="col-2">
+      <div className="col-4 col-sm-3 text-center">
         <ListGroup
           items={ genres }
           onItemSelect={ handleGenreSelect }

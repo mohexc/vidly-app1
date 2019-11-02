@@ -1,5 +1,5 @@
 body {
-  padding: 20px 0 0 0 ;
+  padding: 0 ;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -8,10 +8,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.navbar{ margin-bottom: 30px;}
+
 code {
 font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",monospace;
 }
 
 .clickable{
   cursor: pointer
+}
+
+.btn:hover{
+  transform: translateY(-3px);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
