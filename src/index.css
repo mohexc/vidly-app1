@@ -27,3 +27,8 @@ font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",monospace;
   transform: translateY(-1px);
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
 }
+
+.boxShadow{
+  box-shadow: 5px 5px 20px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}

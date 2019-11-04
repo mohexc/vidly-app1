@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Joi from "joi-browser"
 import Input from "./common/input"
 
-const LoginForm = () => {
-
-  const [data, setData] = useState({ username: "", password: "" })
+const RegisterForm = () => {
+  const [data, setData] = useState({ username: '', password: '', name: '' })
   const [errors, setErrors] = useState({})
 
   const schema = {
-    username: Joi.string().required().label("Username"),
-    password: Joi.string().required().label("Password")
+    username: Joi.string().required().email().label('Username'),
+    password: Joi.string().required().min(5).label('Password'),
+    name: Joi.string().required().label('Name')
   }
 
   const doSubmit = () => {
     // Call the server
-    console.log('Submitted')
+    console.log('Submitted Register Form')
   }
 
   const validate = () => {
@@ -31,8 +31,6 @@ const LoginForm = () => {
     const obj = { [name]: value }
     const nSchema = { [name]: schema[name] }
     const { error } = Joi.validate(obj, nSchema)
-    // if (error) return null
-    // return error.details[0].message
     return error ? error.details[0].message : null
   }
 
@@ -59,21 +57,20 @@ const LoginForm = () => {
     setData(nData)
   }
 
-
   return (
-    <div className="boxShadow p-3 col-lg-6 offset-lg-3"  >
-      <div className="">
-        <h1 >Login</h1>
-        <form onSubmit={ handleSubmit } >
-          <Input name="username" value={ data.username } lebel="Username" onChange={ handleChange } errors={ errors.username } />
-          <Input name="password" value={ data.password } lebel="Password" onChange={ handleChange } errors={ errors.password } />
-          <button
-            disabled={ validate() }
-            className="btn btn-primary">Login</button>
-        </form>
-      </div>
-    </div>
+    <div className="boxShadow p-3 col-lg-6 offset-lg-3">
+      <h1>Resgishter</h1>
+      <form onSubmit={ handleSubmit }>
+        <Input autofocus name="username" value={ data.username } lebel="Username" onChange={ handleChange } errors={ errors.username } />
+        <Input name="password" value={ data.password } lebel="Password" onChange={ handleChange } errors={ errors.password } />
+        <Input name="name" value={ data.name } lebel="Name" onChange={ handleChange } errors={ errors.name } />
+        <button
+          disabled={ validate() }
+          className="btn btn-primary">Login</button>
+      </form>
+    </div >
   );
+
 }
 
-export default LoginForm;
+export default RegisterForm;

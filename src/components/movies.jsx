@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 import MoviesTable from './moviesTable';
 import ListGroup from './common/listGroup';
 import Pagination from './common/paginnation';
@@ -53,7 +54,7 @@ function Movies() {
 
   return (
     <div className="row">
-      <div className="col-4 col-sm-3 text-center">
+      <div className="col-6 offset-3 col-lg-3 text-center">
         <ListGroup
           items={ genres }
           onItemSelect={ handleGenreSelect }
@@ -61,6 +62,7 @@ function Movies() {
         />
       </div>
       <div className="col">
+        <Link to="/moview/new" className="btn btn-primary mb-2" >New Movie</Link>
         <p>Showing { filtered.length } movies in the database.</p>
         <MoviesTable
           nMovies={ nMovies }

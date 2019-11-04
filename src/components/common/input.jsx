@@ -6,13 +6,13 @@ const Input = ({ name, lebel, value, onChange, errors }) => {
       <label htmlFor={ name }>{ lebel }</label>
       <input
         type="text"
-        className="form-control"
+        className="form-control "
         id={ name }
         name={ name }
         value={ value }
         onChange={ onChange }
       />
-      { errors && <div className="alert alert-danger">{ errors }</div> }
+      { errors && <div className="alert alert-danger ">{ errors }</div> }
     </div>
   );
 }

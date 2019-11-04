@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom'
+import RegisterForm from './components/registerForm';
 import Movies from './components/movies';
 import NotFound from './components/notFound';
 import Customers from './components/customers';
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <main className="container">
         <Switch>
+          <Route path="/register" component={ RegisterForm } />
           <Route path="/login" component={ LoginForm }></Route>
           <Route path="/movies/:id" component={ MovieFrom }></Route>
           <Route path="/movies" component={ Movies }></Route>
@@ -26,7 +28,7 @@ function App() {
           <Redirect to="/not-found" />
         </Switch>
       </main>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 
