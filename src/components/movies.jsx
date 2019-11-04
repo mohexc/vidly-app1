@@ -54,9 +54,6 @@ function Movies() {
 
   const handleSort = sortCol => setSortColumn(sortCol)
 
-
-  //? rendering...
-
   let filtered = movies
   if (searchQuery)
     filtered = movies.filter(m => m.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
