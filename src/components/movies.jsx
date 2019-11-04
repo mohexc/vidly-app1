@@ -54,7 +54,7 @@ function Movies() {
 
   return (
     <div className="row">
-      <div className="col-6 offset-3 col-lg-3 text-center">
+      <div className="col col-lg-3 text-center">
         <ListGroup
           items={ genres }
           onItemSelect={ handleGenreSelect }
@@ -62,7 +62,7 @@ function Movies() {
         />
       </div>
       <div className="col">
-        <Link to="/moview/new" className="btn btn-primary mb-2" >New Movie</Link>
+        <Link to="/movies/new" className="btn btn-primary mb-2" >New Movie</Link>
         <p>Showing { filtered.length } movies in the database.</p>
         <MoviesTable
           nMovies={ nMovies }
