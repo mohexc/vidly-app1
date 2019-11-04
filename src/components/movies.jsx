@@ -6,6 +6,7 @@ import Pagination from './common/paginnation';
 import { getMovies } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService'
 import { paginate } from '../utils/paginate'
+import SearchBox from './searchBox';
 import _ from "lodash"
 
 function Movies() {
@@ -15,8 +16,9 @@ function Movies() {
   const [genres, setGenres] = useState([])
   const [pageSize] = useState(4)
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedGenre, setSelectedGenre] = useState([])
+  const [selectedGenre, setSelectedGenre] = useState(null)
   const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     setGenres([{ _id: "", name: "All Genres" }, ...getGenres()])
@@ -38,19 +40,33 @@ function Movies() {
 
   const handlePageChange = page => setCurrentPage(page)
 
-  const handleGenreSelect = (genre) => {
+  const handleGenreSelect = genre => {
     setSelectedGenre(genre)
+    setSearchQuery("")
+    setCurrentPage(1)
+  }
+
+  const handleSerch = query => {
+    setSearchQuery(query)
+    setSelectedGenre(null)
     setCurrentPage(1)
   }
 
   const handleSort = sortCol => setSortColumn(sortCol)
 
-  //? rendering...
-  if (movies.length === 0) return <p>There are no movies in the database</p>
 
-  const filtered = selectedGenre && selectedGenre._id ? movies.filter(m => m.genre._id === selectedGenre._id) : movies
+  //? rendering...
+
+  let filtered = movies
+  if (searchQuery)
+    filtered = movies.filter(m => m.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
+  else if (selectedGenre && selectedGenre._id)
+    filtered = movies.filter(m => m.genre._id === selectedGenre._id)
+
   const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
   const nMovies = paginate(sorted, currentPage, pageSize)
+
+  if (movies.length === 0) return <p>There are no movies in the database</p>
 
   return (
     <div className="row">
@@ -64,6 +80,7 @@ function Movies() {
       <div className="col">
         <Link to="/movies/new" className="btn btn-primary mb-2" >New Movie</Link>
         <p>Showing { filtered.length } movies in the database.</p>
+        <SearchBox value={ searchQuery } onChange={ handleSerch } />
         <MoviesTable
           nMovies={ nMovies }
           onLike={ handleLike }
