@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom'
+import { ToastContainer } from "react-toastify"
 import RegisterForm from './components/registerForm';
 import Movies from './components/movies';
 import NotFound from './components/notFound';
@@ -8,12 +9,13 @@ import Rentals from './components/rentals';
 import Navbar from './components/navbar';
 import MovieFrom from './components/movieForm';
 import LoginForm from './components/loginForm';
-
+import "react-toastify/dist/ReactToasitify.css"
 // import './App.css';
 
 function App() {
   return (
     <React.Fragment>
+      <ToastContainer />
       <Navbar />
       <main className="container">
         <Switch>
