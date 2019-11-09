@@ -9,7 +9,7 @@ import Rentals from './components/rentals';
 import Navbar from './components/navbar';
 import MovieFrom from './components/movieForm';
 import LoginForm from './components/loginForm';
-import "react-toastify/dist/ReactToasitify.css"
+import "react-toastify/dist/ReactToastify.min.css"
 // import './App.css';
 
 function App() {

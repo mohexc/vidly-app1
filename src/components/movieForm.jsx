@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Joi from 'joi-browser';
 import Input from './common/input';
 import Select from './common/select'
-import { getMovie, saveMovie } from './../services/fakeMovieService';
-import { getGenres } from "../services/fakeGenreService.js"
+import { getMovie, saveMovie } from './../services/movieService';
+import { getGenres } from "../services/genreService.js"
 
 const NewMovieForm = ({ match, history }) => {
   const [data, setData] = useState({
@@ -34,20 +34,31 @@ const NewMovieForm = ({ match, history }) => {
     }
   }
 
+  const populateGenres = async () => {
+    const { data: genres } = await getGenres()
+    setGenres(genres)
+  }
+
   useEffect(() => {
-    setGenres(getGenres())
-    const movieId = match.params.id
-    if (movieId === 'new') return
+    populateGenres()
 
-    const movie = getMovie(movieId)
-    if (!movie) return history.replace("/not-found")
+    const populateMovie = async () => {
+      try {
+        const movieId = match.params.id
+        if (movieId === 'new') return
+        const { data: movie } = await getMovie(movieId)
+        setData(mapToViewModel(movie))
+      }
+      catch (ex) {
+        if (ex.response && ex.response.status === 404)
+          return history.replace("/not-found")
+      }
+    }
+    populateMovie()
+  }, [history, match])
 
-    setData(mapToViewModel(movie))
-  }, [match, history])
-
-
-  const doSubmit = () => {
-    saveMovie(data)
+  const doSubmit = async () => {
+    await saveMovie(data)
     history.push('/movies')
   }
 
@@ -98,25 +109,25 @@ const NewMovieForm = ({ match, history }) => {
       <form onSubmit={ handleSubmit } >
         <Input name="title" value={ data.title } lebel="Title" onChange={ handleChange } errors={ errors.title } />
         < Select
-          name="genreId" 
-          value={ data.genreId } 
-          lebel="Genre" 
-          onChange={ handleChange } 
+          name="genreId"
+          value={ data.genreId }
+          lebel="Genre"
+          onChange={ handleChange }
           errors={ errors.genreId }
-          options={genres}
-          />
-        <Input 
-          name="numberInStock" 
-          value={ data.numberInStock } 
-          lebel="Number in Stock" 
-          onChange={ handleChange } 
-          errors={ errors.numberInStock } 
-         />
-        <Input 
-          name="dailyRentalRate" 
-          value={ data.dailyRentalRate } 
-          lebel="Rate" 
-          onChange={ handleChange } 
+          options={ genres }
+        />
+        <Input
+          name="numberInStock"
+          value={ data.numberInStock }
+          lebel="Number in Stock"
+          onChange={ handleChange }
+          errors={ errors.numberInStock }
+        />
+        <Input
+          name="dailyRentalRate"
+          value={ data.dailyRentalRate }
+          lebel="Rate"
+          onChange={ handleChange }
           errors={ errors.dailyRentalRate } />
         <button
           disabled={ validate() }

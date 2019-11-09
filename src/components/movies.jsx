@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import MoviesTable from './moviesTable';
 import ListGroup from './common/listGroup';
 import Pagination from './common/paginnation';
-import { getMovies } from '../services/fakeMovieService';
-import { getGenres } from '../services/fakeGenreService'
+import { getMovies, deleteMovie } from '../services/movieService';
+import { getGenres } from '../services/genreService'
 import { paginate } from '../utils/paginate'
 import SearchBox from './searchBox';
 import _ from "lodash"
@@ -20,14 +21,44 @@ function Movies() {
   const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' })
   const [searchQuery, setSearchQuery] = useState('')
 
+  // useEffect(() => {
+  //   setGenres([{ _id: "", name: "All Genres" }, ...getGenres()])
+  //   setMovies(getMovies())
+  // }, [])
   useEffect(() => {
-    setGenres([{ _id: "", name: "All Genres" }, ...getGenres()])
-    setMovies(getMovies())
+
+    const fetchGenres = async () => {
+      const { data } = await getGenres()
+      setGenres([{ _id: "", name: "All genres" }, ...data])
+    }
+    fetchGenres()
+
+    const fetchMovies = async () => {
+      const { data } = await getMovies()
+      setMovies(data)
+    }
+    fetchMovies()
+
   }, [])
 
   //? event handling...
 
-  const handleDelete = movie => setMovies(movies.filter(m => m._id !== movie._id))
+  const handleDelete = async movie => {
+    const originalMoves = movies
+    console.log(movie)
+    setMovies(movies.filter(m => m._id !== movie._id))
+
+    console.log(movie._id)
+
+    try { await deleteMovie(movie._id) }
+    catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error('This movie has already been delete')
+      setMovies(originalMoves)
+    }
+
+
+  }
 
   const handleLike = movie => {
     const newMovies = [...movies]
