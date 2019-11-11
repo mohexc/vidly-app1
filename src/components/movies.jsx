@@ -10,7 +10,7 @@ import { paginate } from '../utils/paginate'
 import SearchBox from './searchBox';
 import _ from "lodash"
 
-function Movies() {
+function Movies(props) {
 
   //? state
   const [movies, setMovies] = useState([])
@@ -106,7 +106,7 @@ function Movies() {
         />
       </div>
       <div className="col">
-        <Link to="/movies/new" className="btn btn-primary mb-2" >New Movie</Link>
+        { props.user && <Link to="/movies/new" className="btn btn-primary mb-2" >New Movie</Link> }
         <p>Showing { filtered.length } movies in the database.</p>
         <SearchBox value={ searchQuery } onChange={ handleSerch } />
         <MoviesTable
@@ -123,8 +123,6 @@ function Movies() {
           currentPage={ currentPage }
         />
       </div>
-
-
     </div>
   )
 }

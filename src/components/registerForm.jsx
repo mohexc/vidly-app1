@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Joi from "joi-browser"
 import Input from "./common/input"
+//? import * as userService from "../services/userService"  => function we have exported from user service will be methods of userServiceObject
+import { register } from '../services/userService';
+import auth from "../services/authService"
 
-const RegisterForm = () => {
+const RegisterForm = ({ history }) => {
   const [data, setData] = useState({ username: '', password: '', name: '' })
   const [errors, setErrors] = useState({})
 
@@ -12,9 +15,25 @@ const RegisterForm = () => {
     name: Joi.string().required().label('Name')
   }
 
-  const doSubmit = () => {
-    // Call the server
-    console.log('Submitted Register Form')
+  const doSubmit = async () => {
+    //? await userService.register(data)
+    try {
+      const response = await register(data)
+      // localStorage.setItem('token', response.headers['x-auth-token'])
+      auth.loginWithJwt(response.headers['x-auth-token'])
+      // history.push('/')
+      window.location = "/"
+    }
+    catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        console.log(ex.response.data)
+        const err = { ...errors }
+        err.username = ex.response.data
+        setErrors(err)
+
+      }
+    }
+
   }
 
   const validate = () => {

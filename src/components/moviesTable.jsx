@@ -1,4 +1,5 @@
 import React from 'react';
+import auth from '../services/authService'
 import { Link } from 'react-router-dom';
 import Like from './common/like';
 import Table from './common/table';
@@ -10,8 +11,11 @@ const MoviesTable = ({ nMovies, onDelete, onLike, onSort, sortColumn }) => {
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Rate" },
     { key: "like", content: movie => (<Like liked={ movie.liked } onClick={ () => onLike(movie) } />) },
-    { key: "delete", content: movie => (<button className="btn btn-danger btn-sm" onClick={ () => onDelete(movie) } > Delete</button>) },
   ]
+
+  const user = auth.getCurrentUser()
+  if (user && user.isAdmin)
+    columns.push({ key: "delete", content: movie => (<button className="btn btn-danger btn-sm" onClick={ () => onDelete(movie) } > Delete</button>) })
 
   return <Table
     columns={ columns }

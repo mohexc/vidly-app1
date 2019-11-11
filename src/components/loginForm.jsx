@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom';
 import Joi from "joi-browser"
 import Input from "./common/input"
+import auth from '../services/authService'
 
-const LoginForm = () => {
+const LoginForm = (props) => {
 
   const [data, setData] = useState({ username: "", password: "" })
   const [errors, setErrors] = useState({})
@@ -12,9 +14,21 @@ const LoginForm = () => {
     password: Joi.string().required().label("Password")
   }
 
-  const doSubmit = () => {
+  const doSubmit = async () => {
     // Call the server
-    console.log('Submitted')
+    try {
+      await auth.login(data.username, data.password)
+
+      const { state } = props.location
+      window.location = state ? state.from.pathname : '/'
+    }
+    catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const err = { ...errors }
+        err.username = ex.response.data
+        setErrors(err)
+      }
+    }
   }
 
   const validate = () => {
@@ -59,6 +73,7 @@ const LoginForm = () => {
     setData(nData)
   }
 
+  if (auth.getCurrentUser()) return <Redirect to="/" />
 
   return (
     <div className="boxShadow p-3 col-lg-6 offset-lg-3"  >
